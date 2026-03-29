@@ -48,7 +48,6 @@ function send_playfab_response(response_object, data_obj) {
 
 function send_playfab_cloudscript_response(response_object, function_name, exists, cloudscript_result) {
   if(exists) {
-    console.log(cloudscript_result)
     send_playfab_response(response_object,
       {
         FunctionName: function_name,
@@ -180,9 +179,6 @@ function GetBounties(res, player) {
 }
 
 app.post("/Client/LoginWithCustomID", (req, res) => {
-  console.log("Login: ")
-  console.log(req.headers)
-  console.log(req.body)
 
   var sessionticket = "AAAAAAAA";
   if(req.body && req.body.CustomId) {
@@ -240,9 +236,6 @@ app.post("/Client/LoginWithCustomID", (req, res) => {
 }*/
 
 app.post("/Client/ExecuteCloudScript", (req, res) => {
-  console.log("ExecuteCloudScript: ")
-  console.log(req.headers)
-  console.log(req.body)
   if(!req.body["FunctionName"]) {
     res.status(400).send();
     return;
