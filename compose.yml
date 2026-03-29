@@ -1,0 +1,28 @@
+services:
+  cloudflare-tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflare-tunnel
+    command: tunnel --no-autoupdate run
+    restart: unless-stopped
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    networks:
+      - otwdplayfab-network
+    depends_on:
+      - otwdplayfab-emulator
+  otwdplayfab-emulator:
+    build: .
+    command: npm start
+    restart: unless-stopped
+    # exposes the port to localhost
+    #ports:
+      #- "3000:3000"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - otwdplayfab-network
+    container_name: otwdplayfab-emulator
+
+networks:
+  otwdplayfab-network:
+    driver: "bridge"

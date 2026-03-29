@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "express": "^5.2.1",
+    "seedrandom": "^3.0.5"
+  },
+  "scripts": {
+    "start": "node src/index.js"
+  }
+}

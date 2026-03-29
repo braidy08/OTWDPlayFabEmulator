@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <title>OTWD Playfab Emulator</title>
+    <script>
+      const apiEndpoint = window.location.origin
+
+      function resetWeeklyState() {
+        var steamid = document.getElementById("customid").value;
+        if(steamid.length == 0) return;
+
+        var req = new XMLHttpRequest();
+
+        req.onreadystatechange = function() {
+          if (req.readyState == 4) {
+            var resetresult = document.getElementById("resetresult");
+            resetresult.innerText = req.response;
+          }
+        }
+
+
+        req.open("get", apiEndpoint + "/ResetPlayerState?customid=" + steamid);
+        req.send();
+        
+      }
+    </script>
+  </head>
+  <body>
+    <a href="https://github.com/HW12Dev/OTWDPlayFabEmulator">https://github.com/HW12Dev/OTWDPlayFabEmulator</a>
+    <br>
+    <br>
+    <br>
+    <br>
+    
+    <input id="customid" type="text" placeholder="Enter your steam id"/>
+    <button id="resetweeklystate" onclick="resetWeeklyState()">Reset weekly state</button>
+    <br>
+    <span id="resetresult"></span>
+  </body>
+</html>
