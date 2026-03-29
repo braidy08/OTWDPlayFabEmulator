@@ -1,7 +1,7 @@
 # PlayFab emulator for OVERKILL's The Walking Dead
-OTWD used PlayFab for weekly quests/NPCs but that PlayFab title has since stopped operating, this serves to replicate the functionality provided for it.
+OTWD used PlayFab for weekly quests/NPCs and bounties but that PlayFab title has since stopped operating, this serves to replicate the functionality provided for it.
 
-Unfortunately this project only replicates the weekly quest behaviour, the data layout for the weekly NPC feature is known, but not what values it would've had.
+Unfortunately this project only replicates the weekly quest and bounties behaviour, the data layout for the weekly NPC feature is known, but not what values it would've had.
 
 Unfortunately a minimal amount of user data must be stored in order to mark whether or not they've done the quest.
 All this stores is your current weekly quest progress alongside a SHA256 hashed version of your Steam ID.
