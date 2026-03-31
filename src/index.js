@@ -244,13 +244,7 @@ const wandereritems = [
   ]
 ] // gonna be lazy and just do arrays instead of completely random (afaik dlc weapons dont generate)
 
-
-var current_wanderer_seed = "";
-
 function GetWeeklyNPC(res, player) {
-    if(get_weekly_rand_seed() != current_wanderer_seed) {
-    current_wanderer_seed = get_weekly_rand_seed();
-  }
   var rng = get_weekly_rand();
   var selectedwanderermap = wanderermaps[rand_min_max(rng, 0, wanderermaps.length - 1)];
   var selectedwandereritems = wandereritems[rand_min_max(rng, 0, wandereritems.length - 1)];
