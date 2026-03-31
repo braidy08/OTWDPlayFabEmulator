@@ -210,30 +210,69 @@ app.post("/Client/LoginWithCustomID", (req, res) => {
   });
 });
 
-/*handlers.GetWeeklyNPC = function(args) {
-    return {
+const wanderermaps = [
+  "/Game/Schematics/Levels/MainQuests/Georgetown_Laundromat_03.Georgetown_Laundromat_03", // hell or high water
+  "/Game/Schematics/Levels/MainQuests/Underpass_Assault_Bandits_01.Underpass_Assault_Bandits_01", // listening in
+  "/Game/Schematics/Levels/MainQuests/DeptStore_Scavenge_Story_01.DeptStore_Scavenge_Story_01", // open season
+  "/Game/Schematics/Levels/MainQuests/Underground_Escape_Story_01.Underground_Escape_Story_01", // last stop
+  "/Game/Schematics/Levels/MainQuests/DeptStore_Assault_Military_01.DeptStore_Assault_Military_01", // doctor's orders
+  "/Game/Schematics/Levels/MainQuests/Lincoln_Assault_Story_01.Lincoln_Assault_Story_01" // join or die
+] // s2 missions might work but i wont add them for compatibility with old versions + its how it was left as on the playfab end
+
+const wandereritems = [
+  [
+    {
+      Asset: "SBZWeaponData'/Game/Schematics/Weapons/PlayerWeapons/AssaultRifles/CZ805/DWP_CZ805.DWP_CZ805'"
+    },
+    {
+      Asset: "SBZWeaponData'/Game/Schematics/Weapons/PlayerWeapons/Pistols/1911/DWP_1911.DWP_1911'"
+    },
+    {
+      Asset: "SBZWeaponPartSchematic'/Game/Schematics/WeaponParts/Attachments/Gadgets/AssaultLight/SCH_Attachment_Gadget_AssaultLight.SCH_Attachment_Gadget_AssaultLight'"
+    }
+  ],
+  [
+    {
+      Asset: "SBZWeaponData'/Game/Schematics/Weapons/PlayerWeapons/AssaultRifles/G36/DWP_G36.DWP_G36'"
+    },
+    {
+      Asset: "SBZWeaponData'/Game/Schematics/Weapons/PlayerWeapons/Revolvers/ColtDetective/DWP_ColtDetective.DWP_ColtDetective'"
+    },
+    {
+      Asset: "SBZWeaponPartSchematic'/Game/Schematics/WeaponParts/Attachments/Gadgets/LEDCombo/SCH_Attachment_Gadget_LEDCombo.SCH_Attachment_Gadget_LEDCombo'"
+    }
+  ]
+] // gonna be lazy and just do arrays instead of completely random (afaik dlc weapons dont generate)
+
+
+var current_wanderer_seed = "";
+
+function GetWeeklyNPC(res, player) {
+    if(get_weekly_rand_seed() != current_wanderer_seed) {
+    current_wanderer_seed = get_weekly_rand_seed();
+  }
+  var rng = get_weekly_rand();
+  var selectedwanderermap = wanderermaps[rand_min_max(rng, 0, wanderermaps.length - 1)];
+  var selectedwandereritems = wandereritems[rand_min_max(rng, 0, wandereritems.length - 1)];
+  var wanderer_data = {
         timeLeft: 10000000,
         status: "InProgress", // "InProgress", "Expired", "Completed"
         npc: {
-            NPC: "", // ObjectPath, "WandererAISchematic"? maybe one of the assets in /OTWD/Content/Gameplay/AI/Rescuable
+            NPC: "OTWDAICharacterSchematic'/Game/Schematics/AICharacters/AISC_RescuableFollower_WANDERER1.AISC_RescuableFollower_WANDERER1'", // i doubt this needs to get changed
             Map: {
-                Asset: "", // ObjectPath, possibly a USBZLevelSchematic. "WandererRescuableMission"?
+                Asset: `SBZLevelSchematic'${selectedwanderermap}'`,
             },
-            Inventory: [
-                {
-                    Asset: "" // ObjectPath, USBZUnlockable
-                }
-            ]
+            Inventory: selectedwandereritems
         }
-    }
-}*/
+    };
+    send_playfab_cloudscript_response(res, "GetWeeklyNPC", true, wanderer_data);
+} // wanderer seems to be saved into the save game? not sure
 
-/*function ActivateWeeklyNPC(res, player) {
-  set_player_weekly_npc_state(player, "InProgress");
+function ActivateWeeklyNPC(res, player) {
   send_playfab_cloudscript_response(res, "ActivateWeeklyNPC", true, {
     status: "InProgress",
   })
-}*/
+}
 
 app.post("/Client/ExecuteCloudScript", (req, res) => {
   if(!req.body["FunctionName"]) {
@@ -255,8 +294,12 @@ app.post("/Client/ExecuteCloudScript", (req, res) => {
     GetSeed(res, player);
   } else if (function_name == "ActivateWeeklyQuest") {
     ActivateWeeklyQuest(res, player);
+  } else if (function_name == "ActivateWeeklyNPC") {
+    ActivateWeeklyNPC(res, player);
   } else if (function_name == "GetBounties") {
     GetBounties(res, player);
+  } else if (function_name = "GetWeeklyNPC") {
+    GetWeeklyNPC(res, player);
   } else {
     send_playfab_cloudscript_response(res, function_name, false, null);
   }
